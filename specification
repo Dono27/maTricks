@@ -4,5 +4,16 @@ Mire legyen képes a program:
   -Gauss eliminációt végezni a mátrixon a redukált lépcsős alakig
   -determinánst számolni(G-e(gauss elim.) után már könnyű ezt megoldani)
   -transzponálni, inverzet számítani
-  -lineáris egyenletrendszer megoldani (A*x=b egyenletet)
+  -lineáris egyenletrendszert megoldani (A*x=b egyenletet)
   -rang-számítás
+  ...
+
+Adatszerkezetek:
+  -struktúra a mátrixhoz
+  ...
+
+Függvények:
+  -elvégezhető-e az adott művelet a mátrixon(fgv pointerrel)
+  -mátrix-összeadó fgv.
+  ...
+  
