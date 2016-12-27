@@ -13,9 +13,15 @@ Adatszerkezetek:
   -struktúra a mátrixhoz
 
 Függvények:
-  -mátrix méretének bekérése
-  --diagonalitás ellenőrzése
+  -dinamikus memóriaterület foglaló/felszabaditó a mátrixhoz(sorfolytonos)
+  -mátrix méretének/magának a mátrixnak a bekérése
+  -diagonalitás ellenőrzése
   -elvégezhető-e az adott művelet a mátrixon(fgv pointerrel)
   -mátrix-összeadó
   -mátrix-szorzó
+  -transzponáló
+  -aldetermináns számító
+  -G-e
+  -lin. egyenletrendszer megoldó
+  -rangszámító
   
