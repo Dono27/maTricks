@@ -5,8 +5,9 @@ Mire legyen képes a program:
   -determinánst számolni(G-e(gauss elim.) után már könnyű ezt megoldani)
   -transzponálni, inverzet számítani (előtte ellenőrzni, hogy a determináns nem 0)
   -lineáris egyenletrendszert megoldani (A*x=b egyenletet)
-  -rang-számítás
-  -aldetermináns
+  -rangot számolni
+  -aldeterminánst számolni
+  -sajátértéket, sajátvektort számolni
 
 Adatszerkezetek:
   -struktúra a mátrixhoz
@@ -23,4 +24,5 @@ Függvények:
   -G-e
   -lin. egyenletrendszer megoldó
   -rangszámító
+  -sé./sv. számító
   
