@@ -74,4 +74,6 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                 break;
         }
     }
+    
+    return mtxresult;
 }
