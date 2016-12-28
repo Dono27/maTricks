@@ -3,7 +3,7 @@
 
 Matrix* MTX_GaussElim(Matrix* mtxin){
     Matrix* mtxresult = MTX_Malloc(mtxin->rows, mtxin->columns);
-    MTX_Copy(mtxresult,mtxin);
+    MTX_Copy(&mtxresult, &mtxin);
 
     //3 fazisu Gauss-eliminacio, gyakorlatilag egy allapotgep
     enum State{LOOP,CHANGEROW,FINISHED};
