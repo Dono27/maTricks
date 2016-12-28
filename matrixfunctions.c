@@ -8,8 +8,8 @@ Matrix* MTX_Malloc(int r, int c){
     newmtx->numbers = (double**)malloc(r * sizeof(double*));
     newmtx[0] = (double*) malloc(r * c * sizeof(double));
     int rowIter;
-    for (rowIter = 1; rowVar < r; rowIter++){
-        newmtx[rowIter] = newmtx[0] + rowIter*c;
+    for (rowIter = 1; rowIter < r; rowIter++){
+        newmtx[rowIter] = newmtx[0] + rowIter * c;
     }
     return newmtx;
 }
