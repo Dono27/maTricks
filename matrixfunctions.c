@@ -17,7 +17,7 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
             //Elso fazis
             case LOOP:
                 //ha szam == 0, ugrunk a masodik fazisra
-                if(fabs(0.f - mtxresult->numbers[i][j]) < 1.e-9){
+                if( !FloatCmp(mtxresult->numbers[i][j], 0, 1.e-9) ){
                     state = CHANGEROW;
                     break;
                 }
@@ -33,7 +33,7 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                 }
                 //kinullazzuk az alatta levo sorokat
                 for(row = i + 1; row < mtxresult->rows; row++){
-                    if(!(fabs(0.f - mtxresult->numbers[row][j]) < 1.e-9)){
+                    if( FloatCmp(mtxresult->numbers[row][j], 0, 1.e-9) ){
                         for(col = j; col < mtxresult->columns; col++){
                             mtxresult->numbers[row][col] = mtxresult->numbers[row][col] - mtxresult->numbers[row][j]*mtxresult->numbers[i][col];
                         }
@@ -51,13 +51,13 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                     row = i + 1;
                     bool notzero = false;
                     while(!notzero && row < mtxresult->rows){
-                        if(!(fabs(0.f - mtxresult->numbers[row][j]) < 1.e-9)){
+                        if( FloatCmp(mtxresult->numbers[row][j], 0, 1.e-9) ){
                             notzero = true;
                         }
                         else row++;
                     }
                     if(notzero){
-                        MTX_ChangeRow(&mtxresult,i,row);
+                        MTX_ChangeRow(&mtxresult, i, row);
                         state = LOOP;
                         break;
                     }
@@ -71,9 +71,21 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                 state = LOOP;
                 break;
             case FINISHED:
+                if(i == mtxresult->rows - 1){
+                    for(row = i + 1; row < mtxresult->rows; row++){
+                        MTX_DeleteRow(&mtxresult, row);
+                    }
+                }
+                finished = true;
+                //printf("A matrix lepcsos alaku!");
                 break;
         }
     }
-    
     return mtxresult;
+}
+
+int FloatCmp(double a, double b,double precision){
+    if(fabs(a - b) < precision) return 0;
+    else if(a > b)              return 1;
+    else                        return -1;
 }
