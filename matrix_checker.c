@@ -20,18 +20,18 @@ bool IsQuadratic(Matrix* mtxQ){
   }
 }
 
-/*Ha az mtxD mátrix nem kvadratikus, akkor nem lehet z, hogyha csak a főátlójában tartalmaz nem nulla elemeket*/diagonális. Egyébként akkor a
+/*Ha az mtxD mátrix nem kvadratikus, akkor nem lehet diagonális. Egyébként akkor hogyha csak a főátlójában tartalmaz nem nulla elemeket*/
 bool IsDiagonal(Matrix* mtxD){
   if(!IsQuadratic(mtxD)){
     return false;
   }else{
-
+    
   }
 }
 
 /*mtxA és mtxB mátrixok akkor és csakis akkor adhatóak össze, ha azonos típusúak (soraik és oszlopaik száma megegyezik).*/
 bool AddCheck(Matrix* mtxA, Matrix* mtxB){
-  if(mtxA.rows != mtxB.rows || mtxA.columns != mtxB.columns){
+  if(mtxA->rows != mtxB->rows || mtxA.columns != mtxB->columns){
     return false;
   }else{
     return true;
@@ -40,7 +40,7 @@ bool AddCheck(Matrix* mtxA, Matrix* mtxB){
 
 /*mtxA és mtxB mátrix akkor és csakis szorozhatóak össze (Knoecker-szorzat), ha mtxA mátrix oszlopainak száma megegyezik mtxB mátrix sorainak számával.*/
 bool MultiCheck(Matrix* mtxA, Matrix* mtxB){
-  if(mtxA.columns != mtxB.rows){
+  if(mtxA->columns != mtxB->rows){
     return false;
   }else{
     return true;
