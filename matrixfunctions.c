@@ -13,3 +13,7 @@ Matrix* MTX_Malloc(int r, int c){
     }
     return newmtx;
 }
+
+void MTX_Copy(Matrix* cpy, Matrix* src){
+    
+}
