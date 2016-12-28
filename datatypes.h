@@ -7,7 +7,7 @@
 typedef struct Matrix{
     int rows;           ///<sorok szama
     int columns;        ///<oszlopok szama
-    double *numbers;    ///<a szamok
+    double **numbers;   ///<a szamok
 }Matrix;
 
 
