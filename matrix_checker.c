@@ -13,14 +13,14 @@ bool IsInvertable(Matrix* mtxA){
 
 /*Ha az mtxQ mátrix sorainak és oszlopainak száma megegyezik, akkor kvadratikus.*/
 bool IsQuadratic(Matrix* mtxQ){
-  if(mtxD.rows==mtxD.columns){
+  if(mtxQ->rows == mtxQ->columns){
     return true;
   }else{
     return false;
   }
 }
 
-/*Ha az mtxD mátrix nem kvadratikus, akkor nem lehet diagonális. Egyébként akkor az, hogyha csak a főátlójában tartalmaz nem nulla elemeket*/
+/*Ha az mtxD mátrix nem kvadratikus, akkor nem lehet z, hogyha csak a főátlójában tartalmaz nem nulla elemeket*/diagonális. Egyébként akkor a
 bool IsDiagonal(Matrix* mtxD){
   if(!IsQuadratic(mtxD)){
     return false;
