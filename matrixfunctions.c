@@ -5,26 +5,26 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
     Matrix* mtxresult = MTX_Alloc(mtxin->rows, mtxin->columns);
     MTX_Copy(mtxresult,mtxin);
 
-    //3 fazisu Gauss-eliminacio
-    enum States{LOOP,CHANGEROW,FINISHED};
+    //3 fazisu Gauss-eliminacio, gyakorlatilag egy allapotgep
+    enum State{LOOP,CHANGEROW,FINISHED};
 
-    enum States state = LOOP;
+    enum State state = LOOP;
     bool finished = false;
     int i = 0,j = 0;
-    int row,col;
+    int rowVar,colVar;
     while(finished){
         switch(state){
             //Elso fazis
             case LOOP:
                 //ha szam == 0, ugrunk a masodik fazisra
-                if( !FloatCmp(mtxresult->numbers[i][j], 0, 1.e-9) ){
+                if( !FloatCmp(mtxresult->numbers[i][j],0,1.e-9) ){
                     state = CHANGEROW;
                     break;
                 }
                 //egyebkent beszorozzuk a sort az aktualis elem reciprokaval, es harmadik fazisba lepunk ha ez volt az utolso sor
                 else{
-                    for(col = j; col < mtx->columns; col++){
-                        mtxresult->numbers[i][col] = mtxresult->numbers[i][col] * (1.f / mtxresult->numbers[i][j]);
+                    for(colVar = j; colVar < mtx->columns; colVar++){
+                        mtxresult->numbers[i][colVar] = mtxresult->numbers[i][colVar] * (1.f / mtxresult->numbers[i][j]);
                     }
                     if(i == mtxresult->rows - 1){
                         state = FINISHED;
@@ -32,10 +32,10 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                     }
                 }
                 //kinullazzuk az alatta levo sorokat
-                for(row = i + 1; row < mtxresult->rows; row++){
-                    if( FloatCmp(mtxresult->numbers[row][j], 0, 1.e-9) ){
-                        for(col = j; col < mtxresult->columns; col++){
-                            mtxresult->numbers[row][col] = mtxresult->numbers[row][col] - mtxresult->numbers[row][j]*mtxresult->numbers[i][col];
+                for(rowVar = i + 1; rowVar < mtxresult->rows; rowVar++){
+                    if( FloatCmp(mtxresult->numbers[rowVar][j],0,1.e-9) ){
+                        for(colVar = j; colVar < mtxresult->columns; colVar++){
+                            mtxresult->numbers[rowVar][colVar] = mtxresult->numbers[rowVar][colVar] - mtxresult->numbers[rowVar][j]*mtxresult->numbers[i][colVar];
                         }
                     }
                 }
@@ -46,34 +46,39 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                 }
                 i++,j++;
                 break;
+            //2. fazis: sorcsere
             case CHANGEROW:
+                //Ha van meg sor amelyre az adott oszlopban levo elem nem 0, akkor csere
                 if(i < mtxresult->rows-1){
-                    row = i + 1;
+                    rowVar = i + 1;
                     bool notzero = false;
-                    while(!notzero && row < mtxresult->rows){
-                        if( FloatCmp(mtxresult->numbers[row][j], 0, 1.e-9) ){
+                    while(!notzero && rowVar < mtxresult->rows){
+                        if( FloatCmp(mtxresult->numbers[rowVar][j],0,1.e-9) ){
                             notzero = true;
                         }
-                        else row++;
+                        else rowVar++;
                     }
                     if(notzero){
-                        MTX_ChangeRow(&mtxresult, i, row);
+                        MTX_ChangeRow(&mtxresult,i,rowVar);
                         state = LOOP;
                         break;
                     }
                 }
-                else if(j == mtxresult->columns - 1){
+                //elertuk az utolso oszlopot -> vegeztunk
+                if(j == mtxresult->columns - 1){
                     i--;
                     state = FINISHED;
                     break;
                 }
+                //egyebkent folytatodjon a ciklus
                 j++;
                 state = LOOP;
                 break;
             case FINISHED:
+                //a maradek csupa nulla sorok torlese
                 if(i == mtxresult->rows - 1){
-                    for(row = i + 1; row < mtxresult->rows; row++){
-                        MTX_DeleteRow(&mtxresult, row);
+                    for(rowVar = i + 1; rowVar < mtxresult->rows; rowVar++){
+                        MTX_DeleteRow(&mtxresult,rowVar);
                     }
                 }
                 finished = true;
