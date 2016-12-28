@@ -1,5 +1,6 @@
 #include "datatypes.h"
 #include <math.h>
+#include <stdbool.h>
 
 Matrix* MTX_GaussElim(Matrix* mtxin){
     Matrix* mtxresult = MTX_Malloc(mtxin->rows, mtxin->columns);
