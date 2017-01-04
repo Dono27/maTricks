@@ -6,7 +6,7 @@ Matrix* MTX_Malloc(int r, int c){
     newmtx->columns = c;
     newmtx->rows = r;
     newmtx->numbers = (double**)malloc(r * sizeof(double*));
-    newmtx[0] = (double*) malloc(r * c * sizeof(double));
+    newmtx->numbers[0] = (double*) malloc(r * c * sizeof(double));
     int rowIter;
     for (rowIter = 1; rowIter < r; rowIter++){
         newmtx[rowIter] = newmtx[0] + rowIter * c;
