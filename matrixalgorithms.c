@@ -4,7 +4,7 @@
 
 Matrix* MTX_GaussElim(Matrix* mtxin){
     Matrix* mtxresult = MTX_Malloc(mtxin->rows, mtxin->columns);
-    MTX_Copy(&mtxresult, &mtxin);
+    MTX_Copy(mtxresult, mtxin);
 
     //3 fazisu Gauss-eliminacio, gyakorlatilag egy allapotgep
     enum State{LOOP,CHANGEROW,FINISHED};
@@ -24,7 +24,7 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                 }
                 //egyebkent beszorozzuk a sort az aktualis elem reciprokaval, es harmadik fazisba lepunk ha ez volt az utolso sor
                 else{
-                    for(colVar = j; colVar < mtx->columns; colVar++){
+                    for(colVar = j; colVar < mtxresult->columns; colVar++){
                         mtxresult->numbers[i][colVar] = mtxresult->numbers[i][colVar] * (1.f / mtxresult->numbers[i][j]);
                     }
                     if(i == mtxresult->rows - 1){
@@ -60,7 +60,7 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                         else rowVar++;
                     }
                     if(notzero){
-                        MTX_ChangeRow(&mtxresult,i,rowVar);
+                        MTX_ChangeRow(mtxresult,i,rowVar);
                         state = LOOP;
                         break;
                     }
@@ -79,7 +79,7 @@ Matrix* MTX_GaussElim(Matrix* mtxin){
                 //a maradek csupa nulla sorok torlese
                 if(i == mtxresult->rows - 1){
                     for(rowVar = i + 1; rowVar < mtxresult->rows; rowVar++){
-                        MTX_DeleteRow(&mtxresult,rowVar);
+                        MTX_DeleteRow(mtxresult,rowVar);
                     }
                 }
                 finished = true;
