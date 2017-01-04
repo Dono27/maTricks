@@ -1,5 +1,6 @@
 #include "datatypes.h"
-#include <stdlib.h>
+#include "prototypes.h"
+#include "includes.h"
 
 Matrix* MTX_Malloc(int r, int c){
     Matrix* newmtx = malloc(sizeof(Matrix));
