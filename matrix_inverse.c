@@ -1,5 +1,7 @@
-#include <stdlib.h>
 #include "datatypes.h"
+#include "prototypes.h"
+#include "includes.h"
+
 
 Matrix* MTXinverse(Matrix* mtxA){
   if(!IsInvertable(mtxA)){
