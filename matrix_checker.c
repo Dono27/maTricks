@@ -1,6 +1,6 @@
-#include <stdlib.h>
-#include <stdbool.h>
 #include "datatypes.h"
+#include "prototypes.h"
+#include "includes.h"
 
 /*Ha az mtxA mátrix determinánsa 0 (nem invertálható), akkor hamis értéket ad vissza, ha nem nulla, akkor igazat.*/
 bool IsInvertable(Matrix* mtxA){
