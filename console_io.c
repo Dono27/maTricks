@@ -1,6 +1,6 @@
-#include "datatypes.h"
-#include "prototypes.h"
-#include "includes.h"
+#include "console_io_ptypes.h"
+#include "matrix_basicfunc_ptypes.h"
+#include <stdio.h>
 
 Matrix* MTX_ConsoleInp(){
     printf("Adja meg hany sora illetve oszlopa legyen a matrixnak ebben a sorrendben!");
