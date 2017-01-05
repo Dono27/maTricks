@@ -9,3 +9,6 @@ Update: Ezentúl minden forrásfájl kezdődjön
 #include "prototypes.h"
 #include "includes.h"
 -vel :) Ha a forrásfájlhoz valamilyen másik header kell includeolt az includes.h-ban, ha csinálsz egy függvényt akkor deklaráld a prototypes.h-ba, analóg módon datatypes.h.. 
+
+Update: mégse, hülyeséget irtam ne includeolt igy őket, minden forrásfájlnak legyen egy a fgv deklarációkat tartalmazó headerje. 
+Tudot tesztelni a main.c vel, igazából meg tudsz adni neki mátrixokat kitudod iratni stb, illetve müködik a Gauss elim( nem megoldható egyenletekre még nem)
