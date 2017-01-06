@@ -53,4 +53,19 @@ void MTX_Copy(Matrix* mtxTo, Matrix* mtxFrom){
     }
 }
 
+void MTX_AddRow(Matrix* mtx, int i, int t, double lambda){
+    int j;
+    for(j = 0; j < mtx->columns; j++){
+        mtx->numbers[t][j] += lambda * mtx->numbers[i][j];
+    }
+}
+
+void MTX_MultiplyRow(Matrix* mtx, int i, double lambda){
+    int j;
+    for(j = 0; j < mtx->columns; j++){
+        mtx->numbers[i][j] *= lambda;
+    }
+}
+
+
 
