@@ -12,6 +12,7 @@ typedef struct Matrix{
     int rows;           ///<sorok szama
     int columns;        ///<oszlopok szama
     double **numbers;   ///<a szamok
+    double determinant; ///<a matrix determinansa(ha van)
 }Matrix;
 
 #endif
