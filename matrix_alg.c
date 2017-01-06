@@ -8,9 +8,11 @@
 /**Gauss-eliminalo fuggveny.
 *A pm-kent atadott mtx-ot atmasolja egy dinamikusan foglalt mtx-ba(nem az eredetit modositja),
 *es azon Gauss-eliminaciot vegez majd visszater vele. Az algoritmus futasat lehet modositani a flag parameterrel.
-*Ezek ertekei lehetnek a matrix_dtype.h-ban megtalalho makrok
+*Ezek ertekei lehetnek a matrix_dtype.h-ban megtalalho makrok. Ha SOLVE_LINEAR_SYSTEM a flag akkor az eredeti
+*mtx elvesz, hiszen a megoldas a visszateresi matrixrol olvashato le. Elotte masolatot kell csinalni!
 *@param mtx Az eliminalando mtx
 *@param flag Az alg. futasat befolyasolo flag
+*@return A kiszamolt matrix
 */
 Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
     Matrix* mtxCopy = MTX_Malloc(mtx->rows, mtx->columns);
