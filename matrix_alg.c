@@ -21,7 +21,7 @@ Matrix* MTX_GaussElim(Matrix* mtxin,const int flag){
     //3 fazisu Gauss-eliminacio, gyakorlatilag egy allapotgep
     enum State{LOOP,CHANGEROW,FINISHED};
 
-    double temp,div;
+    double lambda;
 
     enum State state = LOOP;
     bool finished = false;
@@ -38,10 +38,8 @@ Matrix* MTX_GaussElim(Matrix* mtxin,const int flag){
                 }
                 //egyebkent beszorozzuk a sort az aktualis elem reciprokaval, es harmadik fazisba lepunk ha ez volt az utolso sor
                 else{
-                    temp = mtxresult->numbers[i][j];
-                    for(colVar = j; colVar < mtxresult->columns; colVar++){
-                        mtxresult->numbers[i][colVar] /= temp;
-                    }
+                    lambda = 1 / mtxresult->numbers[i][j];
+                    MTX_MultiplyRow(mtxresult, i, lambda);
                     if(i == mtxresult->rows - 1){
                         state = FINISHED;
                         break;
@@ -51,10 +49,8 @@ Matrix* MTX_GaussElim(Matrix* mtxin,const int flag){
                 for(rowVar = i + 1; rowVar < mtxresult->rows; rowVar++){
                     //ha az oszlop alatt 0 all, nem is kell kinullazni
                     if( FloatCmp(mtxresult->numbers[rowVar][j],0,1.e-9) ){
-                        temp = mtxresult->numbers[rowVar][j];
-                        for(colVar = j; colVar < mtxresult->columns; colVar++){
-                            mtxresult->numbers[rowVar][colVar] = mtxresult->numbers[rowVar][colVar] - temp * mtxresult->numbers[i][colVar];
-                        }
+                        lambda = -mtxresult->numbers[rowVar][j];
+                        MTX_AddRow(mtxresult, i, rowVar, lambda);
                     }
                 }
                 //ha mar nincs tobb oszlop, 3. fazisra ugras
@@ -96,6 +92,12 @@ Matrix* MTX_GaussElim(Matrix* mtxin,const int flag){
                 //a maradek csupa nulla sorok torlese
                 if(i < mtxresult->rows - 1){
                     for(rowVar = i + 1; rowVar < mtxresult->rows; rowVar++){
+                        //ha tilos sor keletkezett kilepunk
+                        if(flag == SOLVE_LINEAR_SYSTEM){
+                            if(FloatCmp(mtxresult->numbers[rowVar][mtxresult->columns-1], 0, 1.e-9)){
+                                break;
+                            }
+                        }
                         MTX_DeleteRow(mtxresult,rowVar);
                     }
                 }
@@ -114,10 +116,8 @@ Matrix* MTX_GaussElim(Matrix* mtxin,const int flag){
                 }
             }
             for(rowVar = i - 1 ; rowVar >= 0; rowVar--){
-                temp = mtxresult->numbers[rowVar][j];
-                for(colVar = j; colVar < mtxresult->columns; colVar++){
-                    mtxresult->numbers[rowVar][colVar] -= temp * mtxresult->numbers[i][colVar];
-                }
+                lambda = -mtxresult->numbers[rowVar][j];
+                MTX_AddRow(mtxresult, i, rowVar, lambda);
             }
         }
 
