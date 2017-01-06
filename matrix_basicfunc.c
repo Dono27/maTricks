@@ -15,6 +15,12 @@ Matrix* MTX_Malloc(int r, int c){
     return newmtx;
 }
 
+void MTX_Free(Matrix* mtx){
+    free(mtx->numbers[0]);
+    free(mtx->numbers);
+    free(mtx);
+}
+
 void MTX_DeleteRow(Matrix* mtx, int rowNo){
     double* toDelete = mtx->numbers[rowNo];
     int i;
