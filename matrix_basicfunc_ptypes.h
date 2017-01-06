@@ -4,6 +4,7 @@
 #include "matrix_dtype.h"
 
 Matrix* MTX_Malloc(int r, int c);
+void MTX_Free(Matrix* mtx);
 void MTX_DeleteRow(Matrix* mtx, int rowNo);
 void MTX_ChangeRow(Matrix* mtx, int rowA, int rowB);
 void MTX_Copy(Matrix* mtxTo, Matrix* mtxFrom);
