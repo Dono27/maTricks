@@ -40,7 +40,7 @@ void MTX_ChangeRow(Matrix* mtx, int rowA, int rowB){
 bool SizeEqCheck(Matrix* mtxA, Matrix* mtxB){
   if(mtxA->rows != mtxB->rows || mtxA->columns != mtxB->columns){
     return false;
-  }else{
+  } else {
     return true;
   }
 }
@@ -53,9 +53,7 @@ void MTX_Copy(Matrix* mtxTo, Matrix* mtxFrom){
                 mtxTo->numbers[i][j] = mtxFrom->numbers[i][j];
             }
         }
-    }
-    else{
-
+    } else {
     }
 }
 
@@ -73,5 +71,65 @@ void MTX_MultiplyRow(Matrix* mtx, int i, double lambda){
     }
 }
 
+bool IsInvertable(Matrix* mtxA){
+  if(IsQuadratic(mtxA){
+    if(MTX_GaussElim(mtxA, CALCULATE_DET) == 0){
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
 
+bool IsQuadratic(Matrix* mtxQ){
+  if(mtxQ->rows == mtxQ->columns){
+    return true;
+  } else {
+    return false;
+  }
+}
 
+bool IsDiagonal(Matrix* mtxD){
+  if(IsQuadratic(mtxD)){
+    bool mainDiagonal = true;
+    bool zeroElements = true;
+    int i,j = 0;
+    while(i < mtxD-->rows && mainDiagonal){
+      if(mtxD-->numbers[i][i] == 0){
+        mainDiagonal = false;
+      }
+      i++;
+    }
+    i = 0;
+    if(!mainDiagonal){
+      return false;
+    } else {
+      while(i < mtxD-->rows && zeroElements){
+        while(j < mtxD-->columns){
+          if(mtxD-->numbers[i][j] != 0){
+            zeroElements = false;
+          }
+          j++;
+        }
+        i++;
+      }
+    }
+    if(!zeroElements){
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
+bool MultiCheck(Matrix* mtxA, Matrix* mtxB){
+  if(mtxA-->rows == mtxB-->columns){
+    return true;
+  } else {
+    return false;
+  }
+}
