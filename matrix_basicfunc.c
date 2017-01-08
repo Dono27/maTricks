@@ -73,7 +73,7 @@ void MTX_MultiplyRow(Matrix* mtx, int i, double lambda){
 
 bool IsInvertable(Matrix* mtxA){
   if(IsQuadratic(mtxA){
-    if(MTX_GaussElim(mtxA, CALCULATE_DET) == 0){
+    if(mtxA->determinant == 0){
       return false;
     } else {
       return true;
