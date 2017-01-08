@@ -2,6 +2,11 @@
 #include "matrix_basicfunc_ptypes.h"
 #include <stdio.h>
 
+/**Matrix beolvaso fgv.
+*Ezzel a fgvnyel a konzolrol tudunk beolvasni egy matrixot, amelynek dinamikusan foglal memoriat es 
+*a pointerrel ter vissza.
+*@return A beolvasott matrix pointere
+*/
 Matrix* MTX_ConsoleInp(){
     printf("Adja meg hany sora illetve oszlopa legyen a matrixnak ebben a sorrendben!");
     int row,col;
@@ -25,6 +30,10 @@ Matrix* MTX_ConsoleInp(){
     return newMtx;
 }
 
+/**Matrixot kiir a konzolra.
+*A parameterkent megadott matrixot kiirja a konzolablakba
+*@param mtx A kiirando matrix pointere
+*/
 void MTX_ConsolePrintMtx(Matrix* mtx){
     int i,j;
 
