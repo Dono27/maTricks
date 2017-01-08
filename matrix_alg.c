@@ -69,7 +69,7 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
                         D *= mtxCopy->numbers[i][j];
                     }
                     lambda = 1 / mtxCopy->numbers[i][j];
-                    MTX_MultiplyRow(mtx, i, lambda);
+                    MTX_MultiplyRow(mtxCopy, i, lambda);
                     if(i == mtxCopy->rows - 1){
                         state = FINISHED;
                         break;
@@ -110,12 +110,10 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
                         state = LOOP;
                         break;
                     }
-                    else{
-                        if(flag == CALCULATE_DET){
-                            D = 0;
-                            state = FINISHED;
-                            break;
-                        }
+                    else if(flag == CALCULATE_DET){
+                        D = 0;
+                        state = FINISHED;
+                        break;
                     }
                 }
                 //elertuk az utolso oszlopot -> vegeztunk
@@ -140,7 +138,6 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
                         MTX_DeleteRow(mtxCopy,rowVar);
                     }
                 }
-
                 switch(flag){
                     case SOLVE_LINEAR_SYSTEM:
                         //Redukalt lepcsos alak
@@ -160,7 +157,7 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
                         break;
                     case CALCULATE_DET:
                         mtx->determinant = D;
-                        MTX_free(mtxCopy);
+                        MTX_Free(mtxCopy);
                         returnValue = mtx;
                         break;
 
