@@ -6,7 +6,7 @@
 
 
 /**Gauss-eliminalo fuggveny.
-*A pm-kent atadott mtx-ot atmasolja egy dinamikusan foglalt mtx-ba(nem az eredetit modositja),
+*A parameterkent atadott mtx-ot atmasolja egy dinamikusan foglalt mtx-ba(nem az eredetit modositja),
 *es azon Gauss-eliminaciot vegez majd visszater vele. Az algoritmus futasat lehet modositani a flag parameterrel.
 *Ezek ertekei lehetnek a matrix_dtype.h-ban megtalalho makrok. Ha SOLVE_LINEAR_SYSTEM a flag akkor az eredeti
 *mtx elvesz, hiszen a megoldas a visszateresi matrixrol olvashato le. Elotte masolatot kell csinalni!
@@ -18,8 +18,9 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
     Matrix* mtxCopy = MTX_Malloc(mtx->rows, mtx->columns);
     MTX_Copy(mtxCopy, mtx);
 
-    int maxCol,maxRow;
-    double D,lambda;
+    int maxCol, maxRow;
+    double D, lambda;
+    
     switch(flag){
         case SOLVE_LINEAR_SYSTEM:
             //eggyel kevesebb oszlopig kell menni! (A|b) alak
@@ -34,6 +35,7 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
             D = 1;
             maxCol = mtx->columns;
             maxRow = mtx->rows;
+            break;
         default:
             maxCol = mtx->columns;
             maxRow = mtx->rows;
@@ -41,20 +43,21 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
     }
 
     //3 fazisu Gauss-eliminacio, gyakorlatilag egy allapotgep
-    enum State{LOOP,CHANGEROW,FINISHED};
+    enum State{LOOP, CHANGEROW, FINISHED};
     enum State state = LOOP;
-
-    bool finished = false;
-    //i,j a "kulso" valtozok(eszerint haladunk vegig a mtxon)
+    
+    //i,j a "kulso" valtozok(eszerint haladunk vegig a mtxon a gauss eliminacio algoritmusa szerint)
     //rowVar, colVar a muveletekhez szuksegesek
+    bool finished = false;
     int i = 0,j = 0;
     int rowVar,colVar;
+    Matrix* returnValue;
     while(!finished){
         switch(state){
             //Elso fazis
             case LOOP:
                 //ha szam == 0, ugrunk a masodik fazisra
-                if( !FloatCmp(mtx->numbers[i][j], 0, 1.e-9) ){
+                if( !FloatCmp(mtxCopy->numbers[i][j], 0, 1.e-9) ){
                     state = CHANGEROW;
                     break;
                 }
@@ -63,21 +66,21 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
                     //determinans szamolasanal amikor egy sort leosztunk akkor a determinans ertek is megvaltozik
                     //ezt kovetjuk vegig a D valtozoval
                     if(flag == CALCULATE_DET){
-                        D *= mtx->numbers[i][j];
+                        D *= mtxCopy->numbers[i][j];
                     }
-                    lambda = 1 / mtx->numbers[i][j];
+                    lambda = 1 / mtxCopy->numbers[i][j];
                     MTX_MultiplyRow(mtx, i, lambda);
-                    if(i == mtx->rows - 1){
+                    if(i == mtxCopy->rows - 1){
                         state = FINISHED;
                         break;
                     }
                 }
                 //kinullazzuk az alatta levo sorokat
-                for(rowVar = i + 1; rowVar < mtx->rows; rowVar++){
+                for(rowVar = i + 1; rowVar < mtxCopy->rows; rowVar++){
                     //ha az oszlop alatt 0 all, nem is kell kinullazni
-                    if( FloatCmp(mtx->numbers[rowVar][j],0,1.e-9) ){
-                        lambda = -mtx->numbers[rowVar][j];
-                        MTX_AddRow(mtx, i, rowVar, lambda);
+                    if( FloatCmp(mtxCopy->numbers[rowVar][j],0,1.e-9) ){
+                        lambda = -mtxCopy->numbers[rowVar][j];
+                        MTX_AddRow(mtxCopy, i, rowVar, lambda);
                     }
                 }
                 //ha mar nincs tobb oszlop, 3. fazisra ugras
@@ -90,11 +93,11 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
             //2. fazis: sorcsere
             case CHANGEROW:
                 //Ha van meg sor amelyre az adott oszlopban levo elem nem 0, akkor csere
-                if(i < mtx->rows - 1){
+                if(i < mtxCopy->rows - 1){
                     rowVar = i + 1;
                     bool notzero = false;
-                    while(!notzero && rowVar < mtx->rows){
-                        if( FloatCmp(mtx->numbers[rowVar][j], 0, 1.e-9) ){
+                    while(!notzero && rowVar < mtxCopy->rows){
+                        if( FloatCmp(mtxCopy->numbers[rowVar][j], 0, 1.e-9) ){
                             notzero = true;
                         }
                         else rowVar++;
@@ -103,7 +106,7 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
                         if(flag == CALCULATE_DET){
                             D = -D;
                         }
-                        MTX_ChangeRow(mtx,i,rowVar);
+                        MTX_ChangeRow(mtxCopy,i,rowVar);
                         state = LOOP;
                         break;
                     }
@@ -127,46 +130,47 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
                 break;
             case FINISHED:
                 //a maradek csupa nulla sorok torlese
-                if(i < mtx->rows - 1){
-                    for(rowVar = i + 1; rowVar < mtx->rows; rowVar++){
+                if(i < mtxCopy->rows - 1){
+                    for(rowVar = i + 1; rowVar < mtxCopy->rows; rowVar++){
                         if(flag == SOLVE_LINEAR_SYSTEM){
-                            if(FloatCmp(mtx->numbers[rowVar][mtx->columns-1], 0, 1.e-9)){
+                            if(FloatCmp(mtxCopy->numbers[rowVar][mtx->columns-1], 0, 1.e-9)){
                                 break;
                             }
                         }
-                        MTX_DeleteRow(mtx,rowVar);
+                        MTX_DeleteRow(mtxCopy,rowVar);
                     }
                 }
 
                 switch(flag){
                     case SOLVE_LINEAR_SYSTEM:
                         //Redukalt lepcsos alak
-                        for(i = mtx->rows - 1; i > 0; i--){
+                        for(i = mtxCopy->rows - 1; i > 0; i--){
                            for(colVar = 0; colVar < maxCol; colVar++){
-                                if(mtx->numbers[i][colVar] != 0){
+                                if(mtxCopy->numbers[i][colVar] != 0){
                                     j = colVar;
                                     break;
                                 }
                             }
                             for(rowVar = i - 1 ; rowVar >= 0; rowVar--){
-                                lambda = -mtx->numbers[rowVar][j];
-                                MTX_AddRow(mtx, i, rowVar, lambda);
+                                lambda = -mtxCopy->numbers[rowVar][j];
+                                MTX_AddRow(mtxCopy, i, rowVar, lambda);
                             }
                         }
-                        MTX_Copy(mtxCopy, mtx);
+                        returnValue = mtxCopy;
                         break;
                     case CALCULATE_DET:
-                        mtxCopy->determinant = D;
+                        mtx->determinant = D;
+                        MTX_free(mtxCopy);
+                        returnValue = mtx;
                         break;
 
                 }
-                MTX_Free(mtx);
                 finished = true;
                 //printf("A matrix lepcsos alaku!");
                 break;
         }
     }
-    return mtxCopy;
+    return returnValue;
 }
 
 int FloatCmp(double a, double b,double precision){
