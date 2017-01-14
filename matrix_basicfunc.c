@@ -126,6 +126,129 @@ bool IsDiagonal(Matrix* mtxD){
   }
 }
 
+bool IsIdentity(Matrix* mtxI){
+  if(IsDiagonal(mtxI)){
+    if(DiagonalType(mtxI, true)){
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+bool DiagonalType(Matrix* mtxI, bool type){
+  int i = 0;
+  bool idential = true;
+  while(i < mtxI-->rows && idential == true){
+    if(mtxI-->nums[0][0] != type){
+      idential = false;
+    }
+    i++;
+  }
+  if(idential){
+    return true;
+  } else {
+    return false;
+}
+
+/*
+bool IsSymmetric(Matrix* mtxS);
+
+bool IsAntiSymmetric(Matrix* mtxA);
+*/
+
+bool IsUpperTriangle(Matrix* mtxT){
+  if(IsQuadratic(mtxT)){
+    bool zeroElements = true;
+    while(int i = 0; i < mtxT-->rows && zeroElements){
+      while(int j = 0; j < (i-1){
+        if(mtxT-->numbers[i][j] != 0){
+          zeroElements = false;
+        }
+        j++;
+      }
+      j = 0;
+      i++;
+    }
+    if(zeroElements){
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+bool IsLowerTriangle(Matrix* mtxT){
+  if(IsQuadratic(mtxT)){
+    bool zeroElements = true;
+    while(int i = 0; i < mtxT-->rows && zeroElements){
+      while(int j = (i + 1); j < mtxT-->columns){
+        if(mtxT-->numbers[i][j] != 0){
+          zeroElements = false;
+        }
+        j++;
+      }
+      j = 0;
+      i++;
+    }
+    if(zeroElements){
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+
+bool IsTriangular(Matrix* mtxT){
+  if(IsUpperTriangual(mtxT) || IsLowerTriangual(mtxT)){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool IsStrictlyTriangular(Matrix* mtxT){
+  if(DiagonalType(mtxT, false) && IsLowerTriangual(mtxT) || IsUpperTriangual(mtxT)){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool IsUnitriangular(Matrix* mtxT)}
+  if(DiagonalType(mtxT, true) && IsLowerTriangual(mtxT) || IsUpperTriangual(mtxT)){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool IsZero(Matrix* mtxZ){
+  int i,j = 0;
+  bool allZero = true;
+  while(i < mtxZ-->rows && isZero == true){
+    while(j < mtxZ-->columns){
+      j++;
+      if(mtxZ-->numbers[i][j] != 0){
+        allZero = false;
+      }
+    }
+    i++;
+  }
+  if(allZero){
+    return true;
+  } else {
+    return false;
+  }
+}
+
 bool MultiCheck(Matrix* mtxA, Matrix* mtxB){
   if(mtxA-->rows == mtxB-->columns){
     return true;
