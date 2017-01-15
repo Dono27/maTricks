@@ -1,14 +1,18 @@
 # maTricks
 
-A MTX_GaussElim-ben használt függvények amik még nincsenek megírva : MTX_Malloc, MTX_Copy, MTX_ChangeRow
+Ezt a readme fájlt később majd a projekt bemutatkozó szövegének kell szentelni, de egyenlőre használhatjuk jegyzetnek.
 
-Update: a MTX_Mallocot megírtam. Tesztelve nem lett eddig semmelyik függvény se, majd ha meglesznek a i/o függvények és lesz egy konzolos felhasználó/tesztelői interfész akkor tudjuk őket tesztelni.
+# Header állományok és tartalmuk:
+- console_io_pytpes.h (CLI I/O felület)
+- matrix_alg_ptypes.h (algortimushoz tartozó függvények)
+- matrix_basicfunc_ptypes.h (alap műveletek és ellenőrzések)
+- matrix_dtype.h (adatszerkezetek)
 
-Update: Ezentúl minden forrásfájl kezdődjön 
-#include "datatypes.h"
-#include "prototypes.h"
-#include "includes.h"
--vel :) Ha a forrásfájlhoz valamilyen másik header kell includeolt az includes.h-ban, ha csinálsz egy függvényt akkor deklaráld a prototypes.h-ba, analóg módon datatypes.h.. 
+# Readme helyett
+A Projects fülön igyekszem frissíteni az aktuális nagyobb feladatokat. Az Issues fülön meg lehet jelölni problémákat, kódot is lehet bele írni, linkelni forrásállományt, stb.
 
-Update: mégse, hülyeséget irtam ne includeolt igy őket, minden forrásfájlnak legyen egy a fgv deklarációkat tartalmazó headerje. 
-Tudot tesztelni a main.c vel a projektet, igazából meg tudsz adni neki mátrixokat kitudod iratni stb gondolom megtalálod a forrásfájlban a függvényeket, majd irok dokumentációt ha lesz időm, illetve müködik a Gauss elim( nem megoldható egyenletekre még nem).
+# Dokumentáció
+A Wiki fülön közösen lehet szerkeszteni. Másrészt majd a kódot is egységesebben kéne, de egyelőre fontosabb tiszta kódot írni.
+
+# Statisztikák
+A Pulse, illetve Graphs fülön lehet megtekinteni, hogy ki mennyit adott hozzá, törölt ki, hányan, mikor működtek közre.
