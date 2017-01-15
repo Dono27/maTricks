@@ -99,15 +99,15 @@ bool MultiCheck(Matrix* mtxA, Matrix* mtxB) {
 
 Matrix* MTX_Multiply(Matrix* mtxA, Matrix* mtxB) {
   if (MultiCheck(mtxA, mtxB)) {
-    int sum;
+    double sum;
     int i,j,k,l;
     Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxb->columns);
     for (i = 0; i < mtxC->rows; i++) {
       sum = 0;
       for (j = 0; j < mtxC->columns; j++) {
-        for (l; l < mtxA->columns; l++) {
-          for (k; k < mtxB->rows; k++) {
-            sum += mtxA->numbers[i][k] * mtxB->numbers[l][j];
+        for (l = 0; l < mtxA->columns; l++) {
+          for (k = 0; k < mtxB->rows; k++) {
+            sum += mtxA->numbers[i][k] * mtxB->numbers[j][l];
           }
         }
         mtxC->numbers[i][j] = sum;
