@@ -76,8 +76,8 @@ Matrix MTX_Sum(Matrix* mtxA, Matrix* mtxB){
     if(IsDiagonal(mtxA)){
       int i,j;
       Matrix mtxC = MTX_Malloc(mtxA->rows, mtxA->columns);
-      for(i = 0; i < mtxC->rows){
-        for(j = 0; i < mtxC->columns){
+      for(i = 0; i < mtxC->rows, i++){
+        for(j = 0; i < mtxC->columns; j++){
           mtxC->numbers[i][j] = mtxA->numbers[i][j] + mtxB->numbers[i][j];
         }
       }
@@ -101,8 +101,8 @@ Matrix MTX_Multiply(Matrix* mtxA, Matrix* mtxB){
     for(int i = 0; i < mtxC->rows; i++){
       sum = 0;
       for(int j = 0; j < mtxC->columns; j++){
-        for(int l; l < mtxA->columns){
-          for(int k; k < mtxB->rows){
+        for(int l; l < mtxA->columns; l++){
+          for(int k; k < mtxB->rows; k++){
             sum += mtxA->numbers[i][k] * mtxB->numbers[l][j];
           }
         }
