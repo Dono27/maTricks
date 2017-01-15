@@ -38,10 +38,10 @@ void MTX_ChangeRow(Matrix* mtx, int rowA, int rowB){
 }
 
 bool SizeEqCheck(Matrix* mtxA, Matrix* mtxB) {
-  if (mtxA->rows != mtxB->rows || mtxA->columns != mtxB->columns) {
-    return false;
-  } else {
+  if ((mtxA->rows == mtxB->rows) || (mtxA->columns == mtxB->columns)) {
     return true;
+  } else {
+    return false;
   }
 }
 
@@ -72,18 +72,14 @@ void MTX_MultiplyRow(Matrix* mtx, int i, double lambda) {
 
 Matrix* MTX_Sum(Matrix* mtxA, Matrix* mtxB) {
   if (SizeEqCheck(mtxA, mtxB)) {
-    if (IsDiagonal(mtxA)) {
-      int i,j;
-      Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxA->columns);
-      for (i = 0; i < mtxC->rows, i++) {
-        for (j = 0; i < mtxC->columns; j++) {
-          mtxC->numbers[i][j] = mtxA->numbers[i][j] + mtxB->numbers[i][j];
-        }
+    int i,j;
+    Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxA->columns);
+    for ((i = 0); i < mtxC->rows; i++) {
+      for ((j = 0); j < mtxC->columns; j++) {
+        mtxC->numbers[i][j] = (mtxA->numbers[i][j] + mtxB->numbers[i][j]);
       }
-      return mtxC;
-    } else {
-      return NULL;
     }
+    return mtxC;
   } else {
     return NULL;
   }
@@ -100,26 +96,24 @@ bool MultiCheck(Matrix* mtxA, Matrix* mtxB) {
 Matrix* MTX_Multiply(Matrix* mtxA, Matrix* mtxB) {
   if (MultiCheck(mtxA, mtxB)) {
     double sum;
-    int i,j,k,l;
-    Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxb->columns);
-    for (i = 0; i < mtxC->rows; i++) {
-      sum = 0;
-      for (j = 0; j < mtxC->columns; j++) {
-        for (l = 0; l < mtxA->columns; l++) {
-          for (k = 0; k < mtxB->rows; k++) {
-            sum += mtxA->numbers[i][k] * mtxB->numbers[j][l];
+    int i,j,k;
+    Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxB->columns);
+    for (i = 0; i < mtxA->rows; i++) {
+      for (j = 0; j < mtxB->columns; j++) {
+        for (k = 0; k < mtxA->columns; k++) {
+            sum += mtxA->numbers[i][k] * mtxB->numbers[k][j];
           }
-        }
         mtxC->numbers[i][j] = sum;
+        sum = 0;
+        }
       }
-    }
     return mtxC;
   } else {
     return NULL;
   }
 }
 
-void MTX_ScalarMultiplyAddress(Matrix* mtxA, double lambda) {
+void MTX_ScalarMultiply(Matrix* mtxA, double lambda) {
   int i,j;
   for (i = 0; i < mtxA->rows; i++) {
     for (j = 0; j < mtxA->columns; j++) {
@@ -128,32 +122,34 @@ void MTX_ScalarMultiplyAddress(Matrix* mtxA, double lambda) {
   }
 }
 
-Matrix MTX_ScalarMultiplyValue(Matrix* mtxA, double lambda) {
+Matrix* MTX_ScalarMultiplyCopy(Matrix* mtxA, double lambda) {
   int i,j;
+  Matrix* mtxS = MTX_Malloc(mtxA->rows, mtxA->columns);
+  MTX_Copy(mtxS, mtxA);
   for (i = 0; i < mtxA->rows; i++) {
     for (j = 0; j < mtxA->columns; j++) {
-      mtxA->numbers[i][j]*=lambda;
+      mtxS->numbers[i][j] *= lambda;
     }
   }
-  return mtxA;
+  return mtxS;
 }
 
 Matrix* MTX_DiadicMultiply(Matrix* mtxA, Matrix* mtxB) {
-    if (mtxA->rows == 1 && mtxB-->columns == 1) {
+    if (mtxA->rows == 1 && mtxB->columns == 1) {
       Matrix* mtxC = MTX_Malloc(mtxB->rows, mtxA->columns);
       int i,j;
       for (i = 0; i < mtxA->columns; i ++) {
         for (j = 0; j < mtxB->rows; j++) {
-          mtxC->numbers[i][j] = mtxA->numbers[0][i] * mtxB->numbers[j][0];
+          mtxC->numbers[i][j] = (mtxA->numbers[0][i] * mtxB->numbers[j][0]);
         }
       }
       return mtxC;
     } else if (mtxA->columns == 1 && mtxB->rows == 1) {
-        mtxC* = MTX_Malloc(mtxA->rows, mtxB->columns);
+        Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxB->columns);
         int i,j;
         for (i = 0; i < mtxA->rows; i++) {
           for (j = 0; j < mtxB->columns; j++) {
-            mtxC->numbers[i][j] = mtxA->numbers[i][0] * mtxB->numbers[0][j];
+            mtxC->numbers[i][j] = (mtxA->numbers[i][0] * mtxB->numbers[0][j]);
           }
         }
         return mtxC;
@@ -162,29 +158,28 @@ Matrix* MTX_DiadicMultiply(Matrix* mtxA, Matrix* mtxB) {
     }
 }
 
-Matrix* MTX_KnoeckerMultiply(Matrix* mtxA, Matrix* mtxB) {
-  //Matrix* mtxK = MTX_Malloc(mtxA->rows * mtxB->rows, mtxA->columns * mtxB->columns);
-  Matrix* mtxTemp = MTX_Malloc(mtxB->rows, mtxB->columns);
-  int i,j;
-  for (i = 0; i < mtxTemp->rows; i++) {
-    for (j = 0; j < mtxTemp->rows; j++) {
-      mtxTemp->numbers[i][j] = MTX_ScalarMultiplyValue(mtxB, mtxA->numbers[i][j]);
+
+/*Matrix* MTX_KnoeckerMultiply(Matrix* mtxA, Matrix* mtxB) {
+  Matrix* mtxTemp[mtxB->rows][mtxB->columns];
+  int i,j,k,l;
+  for (i = 0; i < mtxB->rows; i++) {
+    for (j = 0; j < mtxB->columns; j++) {
+      mtxTemp[i][j] = MTX_ScalarMultiplyCopy(mtxB, mtxA->numbers[i][j]);
     }
   }
-  Matrix* mtxK = MTX_Malloc(mtxA->rows * mtxB->rows, mtxA->columns * mtxB->columns);
+  Matrix* mtxK = MTX_Malloc((mtxA->rows * mtxB->rows), (mtxA->columns * mtxB->columns));
   for (i = 0; i < mtxK->rows; i++) {
-    int k,l;
     for (j = 0; j < mtxK->columns; j++) {
       for (k = 0; k < mtxB->rows; k++) {
         for (l = 0; l < mtxB->columns; l++) {
-          mtxK->numbers[i][j] = mtxTemp->numbers[i][j][k][l];
+          mtxK->numbers[i][j] = mtxTemp[i][j]->numbers[k][l];
         }
       }
     }
   }
-  MTX_Free(mtxTemp);
   return(mtxK);
-}
+}*/
+
 
 Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB) {
   if (SizeEqCheck(mtxA, mtxB)) {
@@ -192,7 +187,7 @@ Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB) {
     int i,j;
     for (i = 0; i < mtxC->rows; i++) {
       for (j = 0; j < mtxC->columns; j++) {
-        mtxC->numbers[i][j] = mtxA[i][j] * mtxB[i][j];
+        mtxC->numbers[i][j] = (mtxA->numbers[i][j] * mtxB->numbers[i][j]);
       }
     }
     return mtxC;
@@ -201,10 +196,11 @@ Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB) {
   }
 }
 
+
 Matrix* MTX_Transposition(Matrix* mtxA) {
-  if (IsDiagonal(mtxA)) {
+  if (IsQuadratic(mtxA)) {
     int i,j;
-    Matrix mtxT* = MTX_Malloc(mtxA->rows, mtxA->columns);
+    Matrix* mtxT = MTX_Malloc(mtxA->rows, mtxA->columns);
     for (i = 0; i < mtxT->rows; i++) {
       for (j = 0; j < mtxT->columns; j++) {
         mtxT->numbers[i][j] = mtxA->numbers[j][i];
@@ -216,8 +212,31 @@ Matrix* MTX_Transposition(Matrix* mtxA) {
   }
 }
 
+bool IsEqual(Matrix* mtxA, Matrix* mtxB){
+    if (SizeEqCheck(mtxA, mtxB)) {
+        int i,j = 0;
+        bool equal = true;
+        while (i < mtxA->rows && equal) {
+            while (j > mtxA->columns && equal) {
+                if (mtxA->numbers[i][j] == mtxB->numbers[i][j]) {
+                    equal = false;
+                }
+                j++;
+            }
+            i++;
+        }
+        if (equal) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
 bool IsInvertable(Matrix* mtxA) {
-  if (IsQuadratic(mtxA) {
+  if (IsQuadratic(mtxA)) {
     if (mtxA->determinant == 0) {
       return false;
     } else {
@@ -287,7 +306,7 @@ bool DiagonalType(Matrix* mtxI, double type) {
   int i = 0;
   bool idential = true;
   while (i < mtxI->rows && idential) {
-    if (mtxI->nums[0][0] != type) {
+    if (mtxI->numbers[i][i] != type) {
       idential = false;
     }
     i++;
@@ -296,6 +315,7 @@ bool DiagonalType(Matrix* mtxI, double type) {
     return true;
   } else {
     return false;
+    }
 }
 
 
@@ -307,20 +327,20 @@ bool IsSymmetric(Matrix* mtxS){
   }
 }
 
-bool IsAntiSymmetric(Matrix* mtxA)}{
-  if (mtxA == MTX_ScalarMultiplyValue(MTX_Transposition(mtxA), (0 - 1))) {
+bool IsAntiSymmetric(Matrix* mtxA) {
+  if (IsEqual(mtxA, MTX_ScalarMultiplyCopy(MTX_Transposition(mtxA), -1))) {
     return true;
   } else {
     return false;
   }
 }
 
-bool IsUpperTriangle(Matrix* mtxT) {
+bool IsUpperTriangular(Matrix* mtxT) {
   if (IsQuadratic(mtxT)) {
     bool zeroElements = true;
-    int i,j;
-    while (i = 0; i < mtxT->rows && zeroElements) {
-      while (j = 0; j < (i-1) {
+    int i,j = 0;
+    while (i < mtxT->rows && zeroElements) {
+      while (j < (i-1)) {
         if (mtxT->numbers[i][j] != 0) {
           zeroElements = false;
         }
@@ -338,12 +358,13 @@ bool IsUpperTriangle(Matrix* mtxT) {
   }
 }
 
-bool IsLowerTriangle(Matrix* mtxT){
+bool IsLowerTriangular(Matrix* mtxT){
   if(IsQuadratic(mtxT)){
     bool zeroElements = true;
-    int i,j;
-    while (i = 0; i < mtxT->rows && zeroElements) {
-      while (j = (i + 1); j < mtxT->columns) {
+    int i = 0;
+    int j = (i - 1);
+    while (i < mtxT->rows && zeroElements) {
+      while (j < mtxT->columns) {
         if (mtxT->numbers[i][j] != 0) {
           zeroElements = false;
         }
@@ -363,44 +384,46 @@ bool IsLowerTriangle(Matrix* mtxT){
 
 
 bool IsTriangular(Matrix* mtxT) {
-  if (IsUpperTriangual(mtxT) || IsLowerTriangual(mtxT)) {
+  if (IsUpperTriangular(mtxT) || IsLowerTriangular(mtxT)) {
     return true;
   } else {
     return false;
   }
 }
+
 
 bool IsStrictlyTriangular(Matrix* mtxT) {
-  if (DiagonalType(mtxT, false) && IsLowerTriangual(mtxT) || IsUpperTriangual(mtxT)) {
+  if (DiagonalType(mtxT, false) && (IsLowerTriangular(mtxT) || IsUpperTriangular(mtxT))) {
     return true;
   } else {
     return false;
   }
 }
+
 
 bool IsUnitriangular(Matrix* mtxT) {
-  if (DiagonalType(mtxT, true) && IsLowerTriangual(mtxT) || IsUpperTriangual(mtxT)) {
+  if (DiagonalType(mtxT, true) && (IsLowerTriangular(mtxT) || IsUpperTriangular(mtxT))) {
     return true;
   } else {
     return false;
   }
 }
 
-bool IsZero(Matrix* mtxZ){
-  int i,j;
-  bool allZero = true;
-  while (i = 0; i < mtxZ->rows && isZero == true) {
-    while (j = 0; j < mtxZ->columns) {
-      j++;
-      if (mtxZ->numbers[i][j] != 0) {
-        allZero = false;
-      }
+bool isZero(Matrix* mtxZ) {
+    int i,j = 0;
+    bool allZero = true;
+    while ((i < mtxZ->rows) && allZero) {
+        while (j < mtxZ->columns) {
+            if (mtxZ->numbers[i][j] != 0) {
+                allZero = false;
+            }
+            j++;
+        }
+        i++;
     }
-    i++;
-  }
-  if (allZero) {
-    return true;
-  } else {
-    return false;
-  }
+    if (allZero) {
+        return true;
+    } else {
+        return false;
+    }
 }

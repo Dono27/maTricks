@@ -37,22 +37,25 @@ bool MultiCheck(Matrix* mtxA, Matrix* mtxB);
 Matrix* MTX_Multiply(Matrix* mtxA, Matrix* mtxB);
 
 /*Megszorozza a megadott mátrixot egy skalárral. A mátrixot cím szerint szorozza meg.*/
-void MTX_ScalarMultiplyAddress(Matrix* mtxA, double lambda);
+void MTX_ScalarMultiply(Matrix* mtxA, double lambda);
 
 /*Megszorozza a megadott mátrixot egy skalárral. A skalárral megszorzott mátrixot adja vissza, érték szerint.*/
-Matrix MTX_ScalarMultiplyValue(Matrix* mtxA, double lambda);
+Matrix* MTX_ScalarMultiplyCopy(Matrix* mtxA, double lambda);
 
 /*Két mátrix diadikus szorzatát adja vissza.*/
 Matrix* MTX_DiadicMultiply(Matrix* mtxA, Matrix* mtxB);
 
 /*Két mátrix Knoecker-szorzatát adja vissza.*/
-Matrix* MTX_KnoeckerMultiply(Matrix* mtxA, Matrix* mtxB);
+//Matrix* MTX_KnoeckerMultiply(Matrix* mtxA, Matrix* mtxB);
 
 /*Két mátrix Hadamard-szorzatát adja vissza, amennyiben össze lehet szorozni őket (egyforma típusúak.)*/
 Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB);
 
 /*A megadott mátrix transzponáltját adja vissza.*/
 Matrix* MTX_Transposition(Matrix* mtxA);
+
+/*Ha a megadott két mátrix minden eleme egyenlő, akkor igaz értéket ad vissza.*/
+bool IsEqual(Matrix* mtxA, Matrix* mtxB);
 
 /*Ha a megadott mátrix invertálható, akkor igaz értéket ad vissza.*/
 bool IsInvertable(Matrix* mtxA);
