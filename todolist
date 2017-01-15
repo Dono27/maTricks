@@ -1,5 +1,4 @@
 1. Lassan valami GUI-t ki kellene találni/egy olyan contributort szerezni aki jó benne
 - SDL-ben hosszadalmas lenne, win32 API-t meg most tanulom (stchristian)
 -- a Win32 nem platformfüggetlen, akkor már inkább Qt, de még lehet keresek valami jobb megoldást vagy egy contributort ehhez (Dono27)
-2. Ellenőrző függvény: egységmátrix-e?
-3.További függvények deklarálása és implementálása amik a specifikációban vannak
+2.További függvények deklarálása és implementálása amik a specifikációban vannak
