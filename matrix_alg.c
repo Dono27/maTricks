@@ -8,8 +8,9 @@
 /**Gauss-eliminalo fuggveny.
 *A parameterkent atadott mtx-ot atmasolja egy dinamikusan foglalt mtx-ba(nem az eredetit modositja),
 *es azon Gauss-eliminaciot vegez majd visszater vele. Az algoritmus futasat lehet modositani a flag parameterrel.
-*Ezek ertekei lehetnek a matrix_dtype.h-ban megtalalho makrok. Ha SOLVE_LINEAR_SYSTEM a flag akkor az eredeti
-*mtx elvesz, hiszen a megoldas a visszateresi matrixrol olvashato le. Elotte masolatot kell csinalni!
+*Ezek ertekei lehetnek a matrix_dtype.h-ban megtalalho makrok. Ha SOLVE_LINEAR_SYSTEM akkor egy uj matrixot foglal a fuggveny atmasolja ide a megoldando egyenletrendszert
+*es ezen vegzi a muveleteket, majd ezzel is ter vissza. Ha CALCULATE_DET es a matrix nem negyzetes akkor NULL-al ter vissza, egyebkent kiszamolja a determinanst gauss eliminacioval
+*egy masik matrixban es a vegen az eredeti determinant adattagjat modositja.
 *@param mtx Az eliminalando mtx
 *@param flag Az alg. futasat befolyasolo flag
 *@return A kiszamolt matrix
