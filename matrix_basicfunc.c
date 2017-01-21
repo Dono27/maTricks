@@ -2,6 +2,11 @@
 #include "matrix_basicfunc_ptypes.h"
 #include <stdlib.h>
 
+/**Dinamikusan teruletet foglal egy Matrix-nak.
+*@param r sorok szama
+*@param c oszlopok szama
+*@return a lefoglalt teruletre mutato Matrix tipusu pointer
+*/
 Matrix* MTX_Malloc(int r, int c) {
     Matrix* newmtx = malloc(sizeof(Matrix));
     newmtx->columns = c;
@@ -15,12 +20,19 @@ Matrix* MTX_Malloc(int r, int c) {
     return newmtx;
 }
 
+/**Felszabaditja a parameterkent atadott matrixot.
+*@param mtx a felszabaditando matrix
+*/
 void MTX_Free(Matrix* mtx) {
     free(mtx->numbers[0]);
     free(mtx->numbers);
     free(mtx);
 }
 
+/**Torli a megadott sort a matrixbol.
+*@param mtx a celmatrix
+*@param rowNo a torlendo sor indexe
+*/
 void MTX_DeleteRow(Matrix* mtx, int rowNo) {
     double* toDelete = mtx->numbers[rowNo];
     int i;
@@ -31,20 +43,34 @@ void MTX_DeleteRow(Matrix* mtx, int rowNo) {
     mtx->rows--;
 }
 
+/**Megcsereli a megadott sorokat a matrixban.
+*@param mtx a celmatrix
+*@param rowA az egyik cserelendo sor
+*@param rowB a masik cserelndo sor
+*/
 void MTX_ChangeRow(Matrix* mtx, int rowA, int rowB){
     double* temp = mtx->numbers[rowA];
     mtx->numbers[rowA] = mtx->numbers[rowB];
     mtx->numbers[rowB] = temp;
 }
 
+/**Megnezi hogy ket matrix ugyanolyan meretu e.
+*@param mtxA az egyik matrix
+*@param mtxB a masik matrix
+*@return ugyanakkorak e
+*/
 bool SizeEqCheck(Matrix* mtxA, Matrix* mtxB) {
-  if ((mtxA->rows == mtxB->rows) || (mtxA->columns == mtxB->columns)) {
+  if ((mtxA->rows == mtxB->rows) && (mtxA->columns == mtxB->columns)) {
     return true;
   } else {
     return false;
   }
 }
 
+/**Atmasolja az egyik matrixot a masikba.
+ *@param mtxTo ahova masolunk
+ *@param mtxFrom ahonnan masolunk
+ */
 void MTX_Copy(Matrix* mtxTo, Matrix* mtxFrom) {
     if (SizeEqCheck(mtxTo, mtxFrom)) {
         int i,j;
@@ -56,6 +82,12 @@ void MTX_Copy(Matrix* mtxTo, Matrix* mtxFrom) {
     }
 }
 
+/**Az i-edik sor lambdaszorosanak hozzaadasa a t-edik sorhoz.
+ * @param mtx a celmatrix
+ * @param i hozzaadando sor indexe
+ * @param t a sor amihez hozzaadunk
+ * @param lambda lambda*i. sor
+ */
 void MTX_AddRow(Matrix* mtx, int i, int t, double lambda) {
     int j;
     for (j = 0; j < mtx->columns; j++) {
@@ -63,6 +95,10 @@ void MTX_AddRow(Matrix* mtx, int i, int t, double lambda) {
     }
 }
 
+/**A matrix egyik soranak megszorzasa lambdaval.
+ * @param mtx a celmatrix
+ * @param lambda -
+ */
 void MTX_MultiplyRow(Matrix* mtx, int i, double lambda) {
     int j;
     for (j = 0; j < mtx->columns; j++) {
@@ -70,6 +106,11 @@ void MTX_MultiplyRow(Matrix* mtx, int i, double lambda) {
     }
 }
 
+/**Ket matrix osszeadasa.
+ * Ha a ket matrix merete nem egyezett meg NULL-t ad vissza.
+ *@param mtxA
+ *@param mtxB
+ */
 Matrix* MTX_Sum(Matrix* mtxA, Matrix* mtxB) {
   if (SizeEqCheck(mtxA, mtxB)) {
     int i,j;
@@ -85,7 +126,9 @@ Matrix* MTX_Sum(Matrix* mtxA, Matrix* mtxB) {
   }
 }
 
-bool MultiCheck(Matrix* mtxA, Matrix* mtxB) {
+/**Megnezi hogy osszeszorozhato e a ket parameterkent megadott matrix.
+ */
+bool MTX_MultiCheck(Matrix* mtxA, Matrix* mtxB) {
   if (mtxA->columns == mtxB->rows) {
     return true;
   } else {
@@ -93,8 +136,12 @@ bool MultiCheck(Matrix* mtxA, Matrix* mtxB) {
   }
 }
 
+/**Osszeszorozza a parameterkent atadott matrixokat es ezt egy uj matrixban tarolja el.
+ * Ha nem osszeszorozhatoak NULL-t ad vissza.
+ * @return az eredmeny
+ */
 Matrix* MTX_Multiply(Matrix* mtxA, Matrix* mtxB) {
-  if (MultiCheck(mtxA, mtxB)) {
+  if (MTX_MultiCheck(mtxA, mtxB)) {
     double sum;
     int i,j,k;
     Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxB->columns);
@@ -113,6 +160,8 @@ Matrix* MTX_Multiply(Matrix* mtxA, Matrix* mtxB) {
   }
 }
 
+/**Megszorozza a matrixot egy skalarral.
+ */
 void MTX_ScalarMultiply(Matrix* mtxA, double lambda) {
   int i,j;
   for (i = 0; i < mtxA->rows; i++) {
@@ -122,6 +171,9 @@ void MTX_ScalarMultiply(Matrix* mtxA, double lambda) {
   }
 }
 
+/**Megszoroz egy matrixot egy skalarral, de abbol egy uj peldanyt csinal.
+ *
+ */
 Matrix* MTX_ScalarMultiplyCopy(Matrix* mtxA, double lambda) {
   int i,j;
   Matrix* mtxS = MTX_Malloc(mtxA->rows, mtxA->columns);
@@ -134,6 +186,9 @@ Matrix* MTX_ScalarMultiplyCopy(Matrix* mtxA, double lambda) {
   return mtxS;
 }
 
+/**Ket matrix diadikus szorzata.
+ *
+ */
 Matrix* MTX_DiadicMultiply(Matrix* mtxA, Matrix* mtxB) {
     if (mtxA->rows == 1 && mtxB->columns == 1) {
       Matrix* mtxC = MTX_Malloc(mtxB->rows, mtxA->columns);
