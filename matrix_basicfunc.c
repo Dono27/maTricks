@@ -59,7 +59,7 @@ void MTX_ChangeRow(Matrix* mtx, int rowA, int rowB){
 *@param mtxB a masik matrix
 *@return ugyanakkorak e
 */
-bool SizeEqCheck(Matrix* mtxA, Matrix* mtxB) {
+bool MTX_SizeEqCheck(Matrix* mtxA, Matrix* mtxB) {
   if ((mtxA->rows == mtxB->rows) && (mtxA->columns == mtxB->columns)) {
     return true;
   } else {
@@ -72,7 +72,7 @@ bool SizeEqCheck(Matrix* mtxA, Matrix* mtxB) {
  *@param mtxFrom ahonnan masolunk
  */
 void MTX_Copy(Matrix* mtxTo, Matrix* mtxFrom) {
-    if (SizeEqCheck(mtxTo, mtxFrom)) {
+    if (MTX_SizeEqCheck(mtxTo, mtxFrom)) {
         int i,j;
         for (i = 0; i < mtxFrom->rows; i++) {
             for (j = 0; j < mtxFrom->columns; j++) {
@@ -112,7 +112,7 @@ void MTX_MultiplyRow(Matrix* mtx, int i, double lambda) {
  *@param mtxB
  */
 Matrix* MTX_Sum(Matrix* mtxA, Matrix* mtxB) {
-  if (SizeEqCheck(mtxA, mtxB)) {
+  if (MTX_SizeEqCheck(mtxA, mtxB)) {
     int i,j;
     Matrix* mtxC = MTX_Malloc(mtxA->rows, mtxA->columns);
     for ((i = 0); i < mtxC->rows; i++) {
@@ -237,7 +237,7 @@ Matrix* MTX_DiadicMultiply(Matrix* mtxA, Matrix* mtxB) {
 
 
 Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB) {
-  if (SizeEqCheck(mtxA, mtxB)) {
+  if (MTX_SizeEqCheck(mtxA, mtxB)) {
     Matrix* mtxC = MTX_Malloc(mtxB->rows, mtxA->columns);
     int i,j;
     for (i = 0; i < mtxC->rows; i++) {
@@ -253,7 +253,7 @@ Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB) {
 
 
 Matrix* MTX_Transposition(Matrix* mtxA) {
-  if (IsQuadratic(mtxA)) {
+  if (MTX_IsQuadratic(mtxA)) {
     int i,j;
     Matrix* mtxT = MTX_Malloc(mtxA->rows, mtxA->columns);
     for (i = 0; i < mtxT->rows; i++) {
@@ -267,8 +267,8 @@ Matrix* MTX_Transposition(Matrix* mtxA) {
   }
 }
 
-bool IsEqual(Matrix* mtxA, Matrix* mtxB){
-    if (SizeEqCheck(mtxA, mtxB)) {
+bool MTX_IsEqual(Matrix* mtxA, Matrix* mtxB){
+    if (MTX_SizeEqCheck(mtxA, mtxB)) {
         int i,j = 0;
         bool equal = true;
         while (i < mtxA->rows && equal) {
@@ -290,8 +290,8 @@ bool IsEqual(Matrix* mtxA, Matrix* mtxB){
     }
 }
 
-bool IsInvertable(Matrix* mtxA) {
-  if (IsQuadratic(mtxA)) {
+bool MTX_IsInvertable(Matrix* mtxA) {
+  if (MTX_IsQuadratic(mtxA)) {
     if (mtxA->determinant == 0) {
       return false;
     } else {
@@ -302,7 +302,7 @@ bool IsInvertable(Matrix* mtxA) {
   }
 }
 
-bool IsQuadratic(Matrix* mtxQ) {
+bool MTX_IsQuadratic(Matrix* mtxQ) {
   if (mtxQ->rows == mtxQ->columns) {
     return true;
   } else {
@@ -310,8 +310,8 @@ bool IsQuadratic(Matrix* mtxQ) {
   }
 }
 
-bool IsDiagonal(Matrix* mtxD) {
-  if (IsQuadratic(mtxD)) {
+bool MTX_IsDiagonal(Matrix* mtxD) {
+  if (MTX_IsQuadratic(mtxD)) {
     bool mainDiagonal = true;
     bool zeroElements = true;
     int i,j = 0;
@@ -345,9 +345,9 @@ bool IsDiagonal(Matrix* mtxD) {
   }
 }
 
-bool IsIdentity(Matrix* mtxI){
-  if (IsDiagonal(mtxI)) {
-    if (DiagonalType(mtxI, true)) {
+bool MTX_IsIdentity(Matrix* mtxI){
+  if (MTX_IsDiagonal(mtxI)) {
+    if (MTX_DiagonalType(mtxI, true)) {
       return true;
     } else {
       return false;
@@ -357,7 +357,7 @@ bool IsIdentity(Matrix* mtxI){
   }
 }
 
-bool DiagonalType(Matrix* mtxI, double type) {
+bool MTX_DiagonalType(Matrix* mtxI, double type) {
   int i = 0;
   bool idential = true;
   while (i < mtxI->rows && idential) {
@@ -374,7 +374,7 @@ bool DiagonalType(Matrix* mtxI, double type) {
 }
 
 
-bool IsSymmetric(Matrix* mtxS){
+bool MTX_IsSymmetric(Matrix* mtxS){
   if (mtxS == MTX_Transposition(mtxS)) {
     return true;
   } else {
@@ -382,16 +382,16 @@ bool IsSymmetric(Matrix* mtxS){
   }
 }
 
-bool IsAntiSymmetric(Matrix* mtxA) {
-  if (IsEqual(mtxA, MTX_ScalarMultiplyCopy(MTX_Transposition(mtxA), -1))) {
+bool MTX_IsAntiSymmetric(Matrix* mtxA) {
+  if (MTX_IsEqual(mtxA, MTX_ScalarMultiplyCopy(MTX_Transposition(mtxA), -1))) {
     return true;
   } else {
     return false;
   }
 }
 
-bool IsUpperTriangular(Matrix* mtxT) {
-  if (IsQuadratic(mtxT)) {
+bool MTX_IsUpperTriangular(Matrix* mtxT) {
+  if (MTX_IsQuadratic(mtxT)) {
     bool zeroElements = true;
     int i,j = 0;
     while (i < mtxT->rows && zeroElements) {
@@ -413,8 +413,8 @@ bool IsUpperTriangular(Matrix* mtxT) {
   }
 }
 
-bool IsLowerTriangular(Matrix* mtxT){
-  if(IsQuadratic(mtxT)){
+bool MTX_IsLowerTriangular(Matrix* mtxT){
+  if(MTX_IsQuadratic(mtxT)){
     bool zeroElements = true;
     int i = 0;
     int j = (i - 1);
@@ -438,8 +438,8 @@ bool IsLowerTriangular(Matrix* mtxT){
 }
 
 
-bool IsTriangular(Matrix* mtxT) {
-  if (IsUpperTriangular(mtxT) || IsLowerTriangular(mtxT)) {
+bool MTX_IsTriangular(Matrix* mtxT) {
+  if (MTX_IsUpperTriangular(mtxT) || MTX_IsLowerTriangular(mtxT)) {
     return true;
   } else {
     return false;
@@ -447,8 +447,8 @@ bool IsTriangular(Matrix* mtxT) {
 }
 
 
-bool IsStrictlyTriangular(Matrix* mtxT) {
-  if (DiagonalType(mtxT, false) && (IsLowerTriangular(mtxT) || IsUpperTriangular(mtxT))) {
+bool MTX_IsStrictlyTriangular(Matrix* mtxT) {
+  if (MTX_DiagonalType(mtxT, false) && (MTX_IsLowerTriangular(mtxT) || MTX_IsUpperTriangular(mtxT))) {
     return true;
   } else {
     return false;
@@ -456,15 +456,15 @@ bool IsStrictlyTriangular(Matrix* mtxT) {
 }
 
 
-bool IsUnitriangular(Matrix* mtxT) {
-  if (DiagonalType(mtxT, true) && (IsLowerTriangular(mtxT) || IsUpperTriangular(mtxT))) {
+bool MTX_IsUnitriangular(Matrix* mtxT) {
+  if (MTX_DiagonalType(mtxT, true) && (MTX_IsLowerTriangular(mtxT) || MTX_IsUpperTriangular(mtxT))) {
     return true;
   } else {
     return false;
   }
 }
 
-bool isZero(Matrix* mtxZ) {
+bool MTX_IsZero(Matrix* mtxZ) {
     int i,j = 0;
     bool allZero = true;
     while ((i < mtxZ->rows) && allZero) {
