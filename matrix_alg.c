@@ -15,14 +15,14 @@
 *@param flag Az alg. futasat befolyasolo flag
 *@return A kiszamolt matrix
 */
-Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
+Matrix* MTX_GaussElim(Matrix* mtx, const int flag) {
     Matrix* mtxCopy = MTX_Malloc(mtx->rows, mtx->columns);
     MTX_Copy(mtxCopy, mtx);
 
     int maxCol, maxRow;
     double D, lambda;
-    
-    switch(flag){
+
+    switch(flag) {
         case SOLVE_LINEAR_SYSTEM:
             //eggyel kevesebb oszlopig kell menni! (A|b) alak
             maxCol = mtx->columns - 1;
@@ -30,7 +30,7 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
             break;
         case CALCULATE_DET:
             //ha nem negyzetes nincs ertelme det szamolni
-            if(!IsQuadratic(mtx)){
+            if(!MTX_IsQuadratic((mtx))) {
                 return NULL;
             }
             D = 1;
@@ -46,15 +46,15 @@ Matrix* MTX_GaussElim(Matrix* mtx, const int flag){
     //3 fazisu Gauss-eliminacio, gyakorlatilag egy allapotgep
     enum State{LOOP, CHANGEROW, FINISHED};
     enum State state = LOOP;
-    
+
     //i,j a "kulso" valtozok(eszerint haladunk vegig a mtxon a gauss eliminacio algoritmusa szerint)
     //rowVar, colVar a muveletekhez szuksegesek
     bool finished = false;
     int i = 0,j = 0;
     int rowVar,colVar;
     Matrix* returnValue;
-    while(!finished){
-        switch(state){
+    while(!finished) {
+        switch(state) {
             //Elso fazis
             case LOOP:
                 //ha szam == 0, ugrunk a masodik fazisra
