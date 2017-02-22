@@ -57,7 +57,6 @@ void MTX_ChangeRow(Matrix* mtx, int rowA, int rowB){
 /**Megnezi hogy ket matrix ugyanolyan meretu e.
 *@param mtxA az egyik matrix
 *@param mtxB a masik matrix
-*@return ugyanakkorak e
 */
 bool MTX_SizeEqCheck(Matrix* mtxA, Matrix* mtxB) {
   if ((mtxA->rows == mtxB->rows) && (mtxA->columns == mtxB->columns)) {
@@ -108,8 +107,8 @@ void MTX_MultiplyRow(Matrix* mtx, int i, double lambda) {
 
 /**Ket matrix osszeadasa.
  * Ha a ket matrix merete nem egyezett meg NULL-t ad vissza.
- *@param mtxA
- *@param mtxB
+ *@param mtxA egy matrix
+ *@param mtxB egy masik matrix
  */
 Matrix* MTX_Sum(Matrix* mtxA, Matrix* mtxB) {
   if (MTX_SizeEqCheck(mtxA, mtxB)) {
@@ -127,6 +126,8 @@ Matrix* MTX_Sum(Matrix* mtxA, Matrix* mtxB) {
 }
 
 /**Megnezi hogy osszeszorozhato e a ket parameterkent megadott matrix.
+ * @param mtxA egy matrix
+ * @param mtxB egy masik matrix
  */
 bool MTX_MultiCheck(Matrix* mtxA, Matrix* mtxB) {
   if (mtxA->columns == mtxB->rows) {
@@ -161,6 +162,8 @@ Matrix* MTX_Multiply(Matrix* mtxA, Matrix* mtxB) {
 }
 
 /**Megszorozza a matrixot egy skalarral.
+ * @param mtxA egy matrix.
+ * @param lambda a skalar.
  */
 void MTX_ScalarMultiply(Matrix* mtxA, double lambda) {
   int i,j;
@@ -187,7 +190,9 @@ Matrix* MTX_ScalarMultiplyCopy(Matrix* mtxA, double lambda) {
 }
 
 /**Ket matrix diadikus szorzata.
- *
+ * @param mtxA egy matrix.
+ * @param mtxB egy masik matrix.
+ * @return az eredmenymatrix.
  */
 Matrix* MTX_DiadicMultiply(Matrix* mtxA, Matrix* mtxB) {
     if (mtxA->rows == 1 && mtxB->columns == 1) {
@@ -213,29 +218,43 @@ Matrix* MTX_DiadicMultiply(Matrix* mtxA, Matrix* mtxB) {
     }
 }
 
-
-/*Matrix* MTX_KnoeckerMultiply(Matrix* mtxA, Matrix* mtxB) {
-  Matrix* mtxTemp[mtxB->rows][mtxB->columns];
-  int i,j,k,l;
-  for (i = 0; i < mtxB->rows; i++) {
-    for (j = 0; j < mtxB->columns; j++) {
-      mtxTemp[i][j] = MTX_ScalarMultiplyCopy(mtxB, mtxA->numbers[i][j]);
-    }
-  }
-  Matrix* mtxK = MTX_Malloc((mtxA->rows * mtxB->rows), (mtxA->columns * mtxB->columns));
-  for (i = 0; i < mtxK->rows; i++) {
-    for (j = 0; j < mtxK->columns; j++) {
-      for (k = 0; k < mtxB->rows; k++) {
-        for (l = 0; l < mtxB->columns; l++) {
-          mtxK->numbers[i][j] = mtxTemp[i][j]->numbers[k][l];
+/**Két mátrix Knoecker-szorzata
+ * @param mtxA egy matrix.
+ * @param mtxB egy masik matrix.
+ * @return az eredmenymatrix.
+*/
+Matrix* MTX_KnoeckerMultiply(Matrix* mtxA, Matrix* mtxB) {
+  int rowK = mtxA->rows*mtxB->rows;
+  int colK = mtxA->columns*mtxB->columns;
+  Matrix* mtxK = MTX_Malloc(rowK, colK);
+  Matrix* mtxTemp = MTX_Malloc(mtxB->rows, mtxB->columns);
+  int rowA, rowB, colA, colB;
+  int rowAdd = 0;
+  int colAdd = 0;
+  for (colA = 0; colA < mtxA->columns; colA++) {
+    for (rowA = 0; rowA < mtxA->rows; rowA++) {
+        mtxTemp = MTX_ScalarMultiplyCopy(mtxB, mtxA->numbers[rowA][colA]);
+        for (colB = 0; colB < mtxB->columns; colB++) {
+            for (rowB = 0; rowB < mtxB->rows; rowB++) {
+                mtxK->numbers[rowB+rowAdd][colB+colAdd] = mtxTemp->numbers[rowB][colB];
+            }
         }
-      }
+        //free(mtxTemp);
+        colAdd += mtxB->columns;
+        rowA = 0;
+        colA = 0;
     }
+    rowAdd += mtxB->rows;
+    colAdd = 0;
   }
   return(mtxK);
-}*/
+}
 
-
+/**Ket matrix Hadamard-szorzata.
+ * @param mtxA egy matrix
+ * @param mtxB egy masik matrix
+ * @return az eredmeny, ha nincs akkor NULL.
+*/
 Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB) {
   if (MTX_SizeEqCheck(mtxA, mtxB)) {
     Matrix* mtxC = MTX_Malloc(mtxB->rows, mtxA->columns);
@@ -251,7 +270,10 @@ Matrix* MTX_HadamardMultiply(Matrix* mtxA, Matrix* mtxB) {
   }
 }
 
-
+/**A parameterkent atadott matrix transzponaltjat adja vissza
+ * @param mtxA egy matrix
+ * @return mtxA transzponaltja, ha nem negyzetes, akkor NULL-t ad vissza.
+*/
 Matrix* MTX_Transposition(Matrix* mtxA) {
   if (MTX_IsQuadratic(mtxA)) {
     int i,j;
@@ -267,9 +289,9 @@ Matrix* MTX_Transposition(Matrix* mtxA) {
   }
 }
 
-bool MTX_IsEqual(Matrix* mtxA, Matrix* mtxB){
+bool MTX_IsEqual(Matrix* mtxA, Matrix* mtxB) {
     if (MTX_SizeEqCheck(mtxA, mtxB)) {
-        int i,j = 0;
+        int i,j = 0;f
         bool equal = true;
         while (i < mtxA->rows && equal) {
             while (j > mtxA->columns && equal) {
@@ -290,6 +312,9 @@ bool MTX_IsEqual(Matrix* mtxA, Matrix* mtxB){
     }
 }
 
+/**A parameterkent atadott matrixrol eldonti, hogy invertalhato-e.
+ * @param mtxA egy matrix.
+*/
 bool MTX_IsInvertable(Matrix* mtxA) {
   if (MTX_IsQuadratic(mtxA)) {
     if (mtxA->determinant == 0) {
@@ -302,6 +327,9 @@ bool MTX_IsInvertable(Matrix* mtxA) {
   }
 }
 
+/** A parameterkent atadott matrixrol eldonti, hogy negyzetes-e.
+ * @param mtxQ egy matrix.
+*/
 bool MTX_IsQuadratic(Matrix* mtxQ) {
   if (mtxQ->rows == mtxQ->columns) {
     return true;
@@ -310,6 +338,9 @@ bool MTX_IsQuadratic(Matrix* mtxQ) {
   }
 }
 
+/**A parameterkent atadott matrixrol eldonti, hogy diagonalis-e.
+ * @param mtxD egy matrix.
+*/
 bool MTX_IsDiagonal(Matrix* mtxD) {
   if (MTX_IsQuadratic(mtxD)) {
     bool mainDiagonal = true;
@@ -345,6 +376,9 @@ bool MTX_IsDiagonal(Matrix* mtxD) {
   }
 }
 
+/**A parameterkent atadott matrixrol eldonti, hogy egysegmatrix-e.
+ * @param mtxI egy matrix.
+*/
 bool MTX_IsIdentity(Matrix* mtxI){
   if (MTX_IsDiagonal(mtxI)) {
     if (MTX_DiagonalType(mtxI, true)) {
@@ -357,6 +391,10 @@ bool MTX_IsIdentity(Matrix* mtxI){
   }
 }
 
+/**A parameterkent atadott matrixr foatlojarol allapitja meg, hogy csak egyesek vagy nullak alkotjak-e.
+ * @param mtxI egy matrix.
+ * @param type true eseten egyesekre, false eseten nullakat ellenoriz.
+*/
 bool MTX_DiagonalType(Matrix* mtxI, double type) {
   int i = 0;
   bool idential = true;
@@ -373,15 +411,20 @@ bool MTX_DiagonalType(Matrix* mtxI, double type) {
     }
 }
 
-
+/**A parameterkent atadott matrixrol megallapitja, hogy szimmetrikus-e.
+ * @param mtxS egy matrix.
+*/
 bool MTX_IsSymmetric(Matrix* mtxS){
-  if (mtxS == MTX_Transposition(mtxS)) {
+  if (MTX_IsEqual(mtxS, MTX_Transposition(mtxS)) {
     return true;
   } else {
     return false;
   }
 }
 
+/**A parameterkent atadott matrixrol megallapitja, hogy antiszimmetrikus-e.
+ * @param mtxA egy matrix.
+*/
 bool MTX_IsAntiSymmetric(Matrix* mtxA) {
   if (MTX_IsEqual(mtxA, MTX_ScalarMultiplyCopy(MTX_Transposition(mtxA), -1))) {
     return true;
@@ -390,6 +433,9 @@ bool MTX_IsAntiSymmetric(Matrix* mtxA) {
   }
 }
 
+/**A parameterkent atadott matrixrol megallapitja, hogy felso haromszogmatrix-e.
+ * @param mtxT egy matrix.
+*/
 bool MTX_IsUpperTriangular(Matrix* mtxT) {
   if (MTX_IsQuadratic(mtxT)) {
     bool zeroElements = true;
@@ -413,6 +459,9 @@ bool MTX_IsUpperTriangular(Matrix* mtxT) {
   }
 }
 
+/**A parameterkent atadott matrixrol megallapitja, hogy also haromszogmatrix-e.
+ * @param mtxT egy matrix.
+*/
 bool MTX_IsLowerTriangular(Matrix* mtxT){
   if(MTX_IsQuadratic(mtxT)){
     bool zeroElements = true;
@@ -437,7 +486,9 @@ bool MTX_IsLowerTriangular(Matrix* mtxT){
   }
 }
 
-
+/**A parameterkent atadott matrixrol megallapitja, hogy haromszogmatrix-e.
+ * @param mtxT egy matrix.
+*/
 bool MTX_IsTriangular(Matrix* mtxT) {
   if (MTX_IsUpperTriangular(mtxT) || MTX_IsLowerTriangular(mtxT)) {
     return true;
@@ -446,7 +497,9 @@ bool MTX_IsTriangular(Matrix* mtxT) {
   }
 }
 
-
+/**A parameterkent atadott matrixrol megallapitja, hogy foatlojaban csak nullak vannak-e es haromszogmatrix-e.
+ * @param mtxT egy matrix.
+*/
 bool MTX_IsStrictlyTriangular(Matrix* mtxT) {
   if (MTX_DiagonalType(mtxT, false) && (MTX_IsLowerTriangular(mtxT) || MTX_IsUpperTriangular(mtxT))) {
     return true;
@@ -455,7 +508,9 @@ bool MTX_IsStrictlyTriangular(Matrix* mtxT) {
   }
 }
 
-
+/**A parameterkent atadott matrixrol megallapitja, hogy unitriangularis matrix-e (felso- vagy also haromszogmatrix es csak foatlojaban vannak nem 0 elemei, illetve azok mind 1-esek.
+ * @param mtxT egy matrix.
+*/
 bool MTX_IsUnitriangular(Matrix* mtxT) {
   if (MTX_DiagonalType(mtxT, true) && (MTX_IsLowerTriangular(mtxT) || MTX_IsUpperTriangular(mtxT))) {
     return true;
@@ -464,6 +519,9 @@ bool MTX_IsUnitriangular(Matrix* mtxT) {
   }
 }
 
+/**A parameterkent atadott matrixrol megallapitja, hogy zerusmatrix-e.
+ * @param mtZ egy matrix
+*/
 bool MTX_IsZero(Matrix* mtxZ) {
     int i,j = 0;
     bool allZero = true;
