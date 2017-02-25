@@ -338,7 +338,7 @@ bool MTX_IsQuadratic(Matrix* mtxQ) {
   }
 }
 
-/**A parameterkent atadott matrixrol eldonti, hogy diagonalis-e.
+/**A parameterkent atadott matrixrol eldonti, hogy atlos-e.
  * @param mtxD egy matrix.
 */
 bool MTX_IsDiagonal(Matrix* mtxD) {
@@ -381,7 +381,7 @@ bool MTX_IsDiagonal(Matrix* mtxD) {
 */
 bool MTX_IsIdentity(Matrix* mtxI){
   if (MTX_IsDiagonal(mtxI)) {
-    if (MTX_DiagonalType(mtxI, true)) {
+    if (MTX_DiagonalType(mtxI, 1)) {
       return true;
     } else {
       return false;
@@ -501,7 +501,7 @@ bool MTX_IsTriangular(Matrix* mtxT) {
  * @param mtxT egy matrix.
 */
 bool MTX_IsStrictlyTriangular(Matrix* mtxT) {
-  if (MTX_DiagonalType(mtxT, false) && (MTX_IsLowerTriangular(mtxT) || MTX_IsUpperTriangular(mtxT))) {
+  if (MTX_DiagonalType(mtxT, 0) && MTX_IsTriangular(mtxT)) {
     return true;
   } else {
     return false;
@@ -512,7 +512,7 @@ bool MTX_IsStrictlyTriangular(Matrix* mtxT) {
  * @param mtxT egy matrix.
 */
 bool MTX_IsUnitriangular(Matrix* mtxT) {
-  if (MTX_DiagonalType(mtxT, true) && (MTX_IsLowerTriangular(mtxT) || MTX_IsUpperTriangular(mtxT))) {
+  if (MTX_DiagonalType(mtxT, 1) && MTX_IsTriangular(mtxT)) {
     return true;
   } else {
     return false;
