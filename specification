@@ -1,0 +1,28 @@
+Mire legyen képes a program:
+  -mátrixokat eltárolni(nem tetszőlegesen nagyot mivel nem fér el az ablakban), később eldől mekkorát maximum, egyenlőre legyen egy k x n-es  mátrix, ahol k,n <= 10 ✔
+  -mátrixműveleteket végezni: szorzás, összeadás(a vektorok spec. mátrixok tehát a program magában foglalja a mátrix*vektor műveletet) ✔
+  -Gauss eliminációt végezni a mátrixon a redukált lépcsős alakig
+  -determinánst számolni (G-e(gauss elim.) után már könnyű ezt megoldani)
+  -transzponálni ✔
+  -inverzet számítani (előtte ellenőrzni, hogy a determináns nem 0)
+  -lineáris egyenletrendszert megoldani (A*x=b egyenletet)
+  -rangot számolni
+  -aldeterminánst számolni
+  -sajátértéket, sajátvektort számolni
+
+Adatszerkezetek:
+  -struktúra a mátrixhoz ✔
+
+Függvények:
+  -dinamikus memóriaterület foglaló/felszabaditó a mátrixhoz (sorfolytonos) ✔
+  -mátrix méretének/magának a mátrixnak a bekérése ✔
+  -diagonalitás ellenőrzése ✔
+  -elvégezhető-e az adott művelet a mátrixon (függvény pointerrel) ✔
+  -mátrix-összeadó ✔
+  -mátrix-szorzó ✔
+  -transzponáló ✔
+  -aldetermináns számító
+  -Gauss-elinimáció
+  -lineáris egyenletrendszer megoldó
+  -rangszámító
+  -sé./sv. számító
