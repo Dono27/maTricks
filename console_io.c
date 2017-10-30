@@ -2,50 +2,50 @@
 #include "matrix_basicfunc_ptypes.h"
 #include <stdio.h>
 
-/**Matrix beolvaso fgv.
-*Ezzel a fgvnyel a konzolrol tudunk beolvasni egy matrixot, amelynek dinamikusan foglal memoriat es 
+/**Matrix input function
+*Ezzel a fgvnyel a konzolrol tudunk beolvasni egy matrixot, amelynek dinamikusan foglal memoriat es
 *a pointerrel ter vissza.
 *@return A beolvasott matrix pointere
 */
-Matrix* MTX_ConsoleInp(){
+Matrix* matricks_input() {
     printf("Adja meg hany sora illetve oszlopa legyen a matrixnak ebben a sorrendben!");
-    int row,col;
-    scanf(" %d %d",&row,&col);
-    Matrix* newMtx = MTX_Malloc(row, col);
+    int row, col;
+    scanf(" %d %d", &row, &col);
+    Matrix* new_matrix = matrix_Malloc(row, col);
 
-    int i,j;
+    int i, j;
 
     printf("\n    ");
     for (j = 0; j < col; j++){
-        printf("%5d.",j + 1);
+        printf("%5d.", j + 1);
     }
     printf("\n");
     for(i = 0; i < row; i++){
         printf("%3d.",i + 1);
         for(j = 0; j < col; j++){
-            scanf(" %lf",&newMtx->numbers[i][j]);
+            scanf(" %lf", &new_matrix->numbers[i][j]);
         }
     }
 
-    return newMtx;
+    return new_matrix;
 }
 
-/**Matrixot kiir a konzolra.
-*A parameterkent megadott matrixot kiirja a konzolablakba
-*@param mtx A kiirando matrix pointere
+/**Matrixot print function
+Prints the matrix given as parameter into console
+*@param matrix A kiirando pointer of matrix
 */
-void MTX_ConsolePrintMtx(Matrix* mtx){
-    int i,j;
+void matricks_print(Matrix* matrix) {
+    int i, j;
 
     printf("\n    ");
-    for (j = 0; j < mtx->columns; j++){
+    for (j = 0; j < matrix->columns; j++){
         printf("%5d.",j + 1);
     }
     printf("\n");
-    for(i = 0; i < mtx->rows; i++){
-        printf("%3d.",i + 1);
-        for(j = 0; j < mtx->columns; j++){
-            printf("%6.2f",mtx->numbers[i][j]);
+    for(i = 0; i < matrix->rows; i++){
+        printf("%3d.", i + 1);
+        for(j = 0; j < matrix->columns; j++){
+            printf("%6.2f", matrix->numbers[i][j]);
         }
         printf("\n");
     }

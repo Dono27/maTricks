@@ -3,6 +3,6 @@
 #include "matrix_dtype.h"
 
 int FloatCmp(double a, double b,double precision);
-Matrix* MTX_GaussElim(Matrix* mtxin, const int flag);
+Matrix* matricks_gaussian_elimination(Matrix* matrix_input, const int flag);
 
 #endif // MATRIX_ALG_PTYPE_H_INCLUDED

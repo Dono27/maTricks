@@ -1,15 +1,17 @@
-#include "MTX.h"
+#include "matrix.h"
 #include <stdio.h>
 
-int main(void){
-    Matrix* mtx = MTX_ConsoleInp();
+int main(void) {
+    printf("[maTricks] by Nrehtron\n\n");
 
-    MTX_ConsolePrintMtx(mtx);
+    Matrix* matrix = matricks_input();
 
-    mtx = MTX_GaussElim(mtx, CALCULATE_DET);
+    matricks_print(matrix);
 
-    MTX_ConsolePrintMtx(mtx);
-    printf("\nDeterminans : %f", mtx->determinant);
+    matrix = matricks_gaussian_elimination(matrix, CALCULATE_DET);
+
+    matricks_print(matrix);
+    printf("\nDeterminans : %f", matrix->determinant);
 
     return 0;
 }
